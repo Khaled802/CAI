@@ -41,11 +41,15 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        switch (Character.toUpperCase(getChoice())) {
-            case 'S' -> startGame();
-            case 'V' -> getHighestScore();
-            case 'H' -> help();
-            case 'Q' -> {
+        welcome();
+
+        boolean again = true;
+        while (again) {
+            switch (Character.toUpperCase(getChoice())) {
+                case 'S' -> startGame();
+                case 'V' -> getHighestScore();
+                case 'H' -> help();
+                case 'Q' -> again = false;
             }
         }
     }
