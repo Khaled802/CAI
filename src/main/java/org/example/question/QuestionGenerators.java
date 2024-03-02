@@ -1,28 +1,31 @@
 package org.example.question;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class QuestionGenerators {
     private static final Random random = new Random();
-    private static final int MAX_EASY = 10;
-    private static final int MAX_MEDIUM = 100;
-    private static final int MAX_HARD = 1000;
+    private static final Bound EASY_BOUND = new Bound(0, 10);
+    private static final Bound MEDIUM_BOUND = new Bound(10, 100);
+    private static final Bound HARD_BOUND = new Bound(100, 1000);
+
     private static Question generateOnLevel(Level level) {
         int max = switch (level) {
-            case EASY -> MAX_EASY;
-            case MEDIUM -> MAX_MEDIUM;
-            case HARD -> MAX_HARD;
+            case EASY -> EASY_BOUND.max();
+            case MEDIUM -> MEDIUM_BOUND.max();
+            case HARD -> HARD_BOUND.max();
+        };
+        int min = switch (level) {
+            case EASY -> EASY_BOUND.min();
+            case MEDIUM -> MEDIUM_BOUND.min();
+            case HARD -> HARD_BOUND.min();
         };
 
-        int num1 = random.nextInt(max);
-        int num2 = random.nextInt(max);
+        int num1 = random.nextInt(min, max);
+        int num2 = random.nextInt(min, max);
         List<Integer> choices = new ArrayList<>();
         choices.add(num1 * num2);
         for (int i = 0; i < 3; i++) {
-            choices.add(random.nextInt((max-1)*(max-1)+1));
+            choices.add(random.nextInt(min*min,(max-1)*(max-1)+1));
         }
         Collections.shuffle(choices);
         return new Question(num1, num2, choices);
@@ -39,3 +42,4 @@ public class QuestionGenerators {
         return generateOnLevel(Level.HARD);
     }
 }
+record Bound(int min, int max) {};
