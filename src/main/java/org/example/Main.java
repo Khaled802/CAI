@@ -106,7 +106,7 @@ public class Main {
                 throw new RuntimeException(e);
             }
         }).takeWhile(Objects::nonNull).map(ele -> ele.split(":")).max(
-                Comparator.comparingInt(ele -> Integer.parseInt(ele[1]))).orElse(new String[]{"N/A", "0"});
+                Comparator.comparingDouble(ele -> Double.parseDouble(ele[1]))).orElse(new String[]{"N/A", "0"});
         fileReader.close();
         System.out.println("=================================");
         System.out.printf("%s has highest score: %s\n", maxScorer[0], maxScorer[1]);

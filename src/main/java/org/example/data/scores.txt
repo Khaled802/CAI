@@ -1,1 +1,2 @@
-khaled:1.0
+khaled:100.0
+ahmed:30.0
