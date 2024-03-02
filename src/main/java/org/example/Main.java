@@ -2,8 +2,6 @@ package org.example;
 
 import org.example.message.Message;
 import org.example.message.RandomMessages;
-import org.example.question.Question;
-import org.example.question.QuestionGenerators;
 
 import java.io.*;
 import java.nio.file.Paths;
@@ -12,33 +10,14 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
+import static org.example.ControlPanel.getChoice;
+import static org.example.ControlPanel.welcome;
+
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     private final static Scanner input = new Scanner(System.in);
 
-    private static void welcome() {
-        System.out.println("""
-                -----------------------------------
-                             WELCOME
-                               to
-                           THE EDU GAME
-                -----------------------------------
-                     Do you want to master math
-                -----------------------------------
-                 """);
-    }
-
-    private static char getChoice() {
-        System.out.println("""
-                > Press S to start the game
-                > Press V to view the highest score
-                > Press H to help
-                > Press Q to quit
-                Enter your choice:
-                 """);
-        return input.nextLine().charAt(0);
-    }
 
     public static void main(String[] args) throws IOException, InterruptedException {
         welcome();
@@ -51,18 +30,23 @@ public class Main {
                 case 'H' -> help();
                 case 'Q' -> again = false;
             }
+            System.out.println("Press Enter to continue...");
+            input.nextLine();
+
         }
     }
 
     private static void startGame() throws IOException, InterruptedException {
         Game game = new Game();
         System.out.println("Enter your name: ");
+        System.out.print("> ");
         String name = input.nextLine();
         int i = 0;
         while (!game.isAnsweredAllQuestions()) {
             System.out.println(++i + "-");
             var question = game.getQuestion();
             System.out.println(question);
+            System.out.print("> ");
             char ans = input.nextLine().charAt(0);
             boolean isCorrect = game.answer(question, ans);
             System.out.println(
