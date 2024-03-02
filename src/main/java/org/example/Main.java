@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.message.Message;
+import org.example.message.RandomMessages;
 import org.example.question.Question;
 import org.example.question.QuestionGenerators;
 
@@ -38,7 +40,7 @@ public class Main {
         return input.nextLine().charAt(0);
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         switch (Character.toUpperCase(getChoice())) {
             case 'S' -> startGame();
             case 'V' -> getHighestScore();
@@ -48,7 +50,7 @@ public class Main {
         }
     }
 
-    private static void startGame() throws IOException {
+    private static void startGame() throws IOException, InterruptedException {
         Game game = new Game();
         System.out.println("Enter your name: ");
         String name = input.nextLine();
@@ -59,10 +61,20 @@ public class Main {
             System.out.println(question);
             char ans = input.nextLine().charAt(0);
             boolean isCorrect = game.answer(question, ans);
-            System.out.println(isCorrect ? "correct" : "wrong");
+            System.out.println(
+                    isCorrect ? RandomMessages.getMessage(Message.SUCCESS) : RandomMessages.getMessage(Message.FAILED));
+            System.out.println("Hit Enter to continue");
+            input.nextLine();
+            switch (OperatingSystem.getOperatingSystem()) {
+                case WINDOWS -> new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+                case LINUX -> System.out.print("\033\143");
+            }
         }
-        System.out.println(game.getResult());
-        FileWriter fileWriter = new FileWriter(Paths.get("src", "main", "java", "org", "example", "data", "scores.txt").toString(), true);
+        System.out.println("Your Result: %" + game.getResult());
+        System.out.println(
+                game.getResult() >= 75 ? "Congratulations, you are ready to go to the next level!" : " Please ask your teacher for extra help.");
+        FileWriter fileWriter = new FileWriter(
+                Paths.get("src", "main", "java", "org", "example", "data", "scores.txt").toString(), true);
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
         bufferedWriter.write(name);
         bufferedWriter.write(":");
@@ -84,7 +96,8 @@ public class Main {
     }
 
     private static void getHighestScore() throws IOException {
-        FileReader fileReader = new FileReader(Paths.get("src", "main", "java", "org", "example", "data", "scores.txt").toString());
+        FileReader fileReader = new FileReader(
+                Paths.get("src", "main", "java", "org", "example", "data", "scores.txt").toString());
         BufferedReader bufferedReader = new BufferedReader(fileReader);
         String[] maxScorer = Stream.generate(() -> {
             try {
@@ -95,6 +108,8 @@ public class Main {
         }).takeWhile(Objects::nonNull).map(ele -> ele.split(":")).max(
                 Comparator.comparingInt(ele -> Integer.parseInt(ele[1]))).orElse(new String[]{"N/A", "0"});
         fileReader.close();
+        System.out.println("=================================");
         System.out.printf("%s has highest score: %s\n", maxScorer[0], maxScorer[1]);
+        System.out.println("=================================");
     }
 }

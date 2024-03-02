@@ -45,6 +45,6 @@ public class Game {
         return answered == NUMBER_OF_QUESTIONS;
     }
     public double getResult() {
-        return answeredCorrectly / (double) answered;
+        return (answeredCorrectly / (double) answered) * 100;
     }
 }
