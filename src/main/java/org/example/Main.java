@@ -52,13 +52,13 @@ public class Main {
     }
 
     private static void startGame() {
-        System.out.println("Enter your name:");
-        String name = input.nextLine();
-        for (int i = 0; i < 4; i++) {
-            Question question = QuestionGenerators.generateEasy();
+        Game game = new Game();
+        while (!game.isAnsweredAllQuestions()) {
+            var question = game.getQuestion();
             System.out.println(question);
-            char choice = input.nextLine().charAt(0);
-            System.out.println(question.isGuessCorrect(choice) ? "correct" : "wrong");
+            char ans = input.nextLine().charAt(0);
+            boolean isCorrect = game.answer(question, ans);
+            System.out.println(isCorrect ? "correct" : "wrong");
         }
     }
 
