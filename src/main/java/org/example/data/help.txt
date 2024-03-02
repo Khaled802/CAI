@@ -1,0 +1,22 @@
+Certainly! Here's an updated version of the help document tailored specifically for a multiplication quiz:
+
+Multiplication Quiz Console Application Help Documentation
+Overview
+Welcome to the Multiplication Quiz Console Application! This application allows users to practice multiplication by taking quizzes directly from the console. This document provides guidance on how to use the application effectively.
+Starting a Quiz
+To start a new multiplication quiz session, simply type start and press Enter. The application will then generate multiplication questions for you to answer.
+
+Answering Questions
+During the quiz session, the application will present multiplication questions. Read each question carefully and type your answer in the console. Press Enter to submit your answer.
+
+Scoring
+After completing the quiz, the application will display your score, indicating the number of correct answers out of the total questions.
+
+Ending a Quiz Session
+You can end a quiz session at any time by typing quit or exit and pressing Enter. This will exit the application and return you to the console prompt.
+
+Need Help?
+If you need assistance while using the application, type help and press Enter. This will display this help document, providing guidance on how to use the application effectively.
+
+Feedback and Support
+If you encounter any issues or have suggestions for improvement, please feel free to contact us at support@example.com. Your feedback is valuable to us!

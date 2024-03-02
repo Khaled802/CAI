@@ -18,6 +18,7 @@ public class Question {
         return ans == num1 * num2;
     }
     public boolean isGuessCorrect(char ans) {
+        ans = Character.toUpperCase(ans);
         return choices.get(ans - 'A') == num1 * num2;
     }
     public String getChoicesFormatted() {
