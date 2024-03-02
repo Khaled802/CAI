@@ -3,10 +3,7 @@ package org.example;
 import org.example.question.Question;
 import org.example.question.QuestionGenerators;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.Objects;
@@ -51,15 +48,28 @@ public class Main {
         }
     }
 
-    private static void startGame() {
+    private static void startGame() throws IOException {
         Game game = new Game();
+        System.out.println("Enter your name: ");
+        String name = input.nextLine();
+        int i = 0;
         while (!game.isAnsweredAllQuestions()) {
+            System.out.println(++i + "-");
             var question = game.getQuestion();
             System.out.println(question);
             char ans = input.nextLine().charAt(0);
             boolean isCorrect = game.answer(question, ans);
             System.out.println(isCorrect ? "correct" : "wrong");
         }
+        System.out.println(game.getResult());
+        FileWriter fileWriter = new FileWriter(Paths.get("src", "main", "java", "org", "example", "data", "scores.txt").toString(), true);
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        bufferedWriter.write(name);
+        bufferedWriter.write(":");
+        bufferedWriter.write(Double.toString(game.getResult()));
+        bufferedWriter.newLine();
+        bufferedWriter.flush();
+        fileWriter.close();
     }
 
     private static void help() throws IOException {
@@ -84,6 +94,7 @@ public class Main {
             }
         }).takeWhile(Objects::nonNull).map(ele -> ele.split(":")).max(
                 Comparator.comparingInt(ele -> Integer.parseInt(ele[1]))).orElse(new String[]{"N/A", "0"});
+        fileReader.close();
         System.out.printf("%s has highest score: %s\n", maxScorer[0], maxScorer[1]);
     }
 }

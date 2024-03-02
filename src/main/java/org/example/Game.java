@@ -21,11 +21,11 @@ public class Game {
 
     public boolean answer(Question question, char choice) {
         boolean correct = question.isGuessCorrect(choice);
+        answered++;
         if (!correct) {
             levelInRow = 0;
             return false;
         }
-        answered++;
         answeredCorrectly++;
         if (++levelInRow == 3) {
             upgradeLevel();
@@ -43,5 +43,8 @@ public class Game {
     }
     public boolean isAnsweredAllQuestions() {
         return answered == NUMBER_OF_QUESTIONS;
+    }
+    public double getResult() {
+        return answeredCorrectly / (double) answered;
     }
 }
