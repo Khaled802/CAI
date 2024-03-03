@@ -1,2 +1,3 @@
-package org.example.score;public class UserScore {
-}
+package org.example.score;
+
+public record UserScore(String username, double score) {}

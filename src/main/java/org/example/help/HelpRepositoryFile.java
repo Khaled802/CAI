@@ -1,4 +1,4 @@
-package org.example.score;
+package org.example.help;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

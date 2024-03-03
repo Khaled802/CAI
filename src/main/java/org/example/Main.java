@@ -2,14 +2,16 @@ package org.example;
 
 import org.example.message.Message;
 import org.example.message.RandomMessages;
+import org.example.help.HelpRepositoryFile;
+import org.example.score.UserScore;
+import org.example.score.repository.ScoreRepository;
+import org.example.score.repository.ScoreRepositoryFile;
 
 import java.io.*;
-import java.nio.file.Paths;
-import java.util.Comparator;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
+import static java.lang.StringTemplate.STR;
 import static org.example.ControlPanel.getChoice;
 import static org.example.ControlPanel.welcome;
 
@@ -38,6 +40,7 @@ public class Main {
 
     private static void startGame() throws IOException, InterruptedException {
         Game game = new Game();
+        ScoreRepository scoreRepository = new ScoreRepositoryFile();
         System.out.println("Enter your name: ");
         System.out.print("> ");
         String name = input.nextLine();
@@ -61,43 +64,21 @@ public class Main {
         System.out.println("Your Result: %" + game.getResult());
         System.out.println(
                 game.getResult() >= 75 ? "Congratulations, you are ready to go to the next level!" : " Please ask your teacher for extra help.");
-        FileWriter fileWriter = new FileWriter(
-                Paths.get("src", "main", "java", "org", "example", "data", "scores.txt").toString(), true);
-        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-        bufferedWriter.write(name);
-        bufferedWriter.write(":");
-        bufferedWriter.write(Double.toString(game.getResult()));
-        bufferedWriter.newLine();
-        bufferedWriter.flush();
-        fileWriter.close();
+        scoreRepository.addNewScore(new UserScore(name, game.getResult()));
     }
 
     private static void help() throws IOException {
-        FileReader fileReader = new FileReader(
-                Paths.get("src", "main", "java", "org", "example", "data", "help.txt").toString());
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-        String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            System.out.println(line);
-        }
-        bufferedReader.close();
+        HelpRepositoryFile helpRepository = new HelpRepositoryFile();
+        System.out.println(helpRepository.getHelp());
     }
 
     private static void getHighestScore() throws IOException {
-        FileReader fileReader = new FileReader(
-                Paths.get("src", "main", "java", "org", "example", "data", "scores.txt").toString());
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-        String[] maxScorer = Stream.generate(() -> {
-            try {
-                return bufferedReader.readLine();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }).takeWhile(Objects::nonNull).map(ele -> ele.split(":")).max(
-                Comparator.comparingDouble(ele -> Double.parseDouble(ele[1]))).orElse(new String[]{"N/A", "0"});
-        fileReader.close();
+        ScoreRepository scoreRepositoryFile = new ScoreRepositoryFile();
+        Optional<UserScore> score = scoreRepositoryFile.getMaxScore();
         System.out.println("=================================");
-        System.out.printf("%s has highest score: %s\n", maxScorer[0], maxScorer[1]);
+        score.ifPresentOrElse(
+                val -> System.out.println(STR. "\{ val.username() } has highest score: \{ val.score() }"),
+                () -> System.out.println("No one takes the quiz"));
         System.out.println("=================================");
     }
 }

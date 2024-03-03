@@ -1,4 +1,6 @@
-package org.example.repo;
+package org.example.score.repository;
+
+import org.example.score.UserScore;
 
 import java.io.*;
 import java.nio.file.Paths;
@@ -7,19 +9,22 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class ScoreRepositoryFile {
-    public record UserScore(String username, double score) {}
+public class ScoreRepositoryFile implements ScoreRepository {
+
+    @Override
     public void addNewScore(UserScore score) throws IOException {
         FileWriter fileWriter = new FileWriter(
                 Paths.get("src", "main", "java", "org", "example", "data", "scores.txt").toString(), true);
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-        bufferedWriter.write(score.username);
+        bufferedWriter.write(score.username());
         bufferedWriter.write(":");
-        bufferedWriter.write(Double.toString(score.score));
+        bufferedWriter.write(Double.toString(score.score()));
         bufferedWriter.newLine();
         bufferedWriter.flush();
         fileWriter.close();
     }
+
+    @Override
     public Optional<UserScore> getMaxScore() throws IOException {
         FileReader fileReader = new FileReader(
                 Paths.get("src", "main", "java", "org", "example", "data", "scores.txt").toString());
