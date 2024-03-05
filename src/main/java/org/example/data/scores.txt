@@ -1,3 +1,5 @@
 khaled:100.0
 ahmed:30.0
 Ali:35.0
+khaled:25.0
+Elsayed:40.0

@@ -12,8 +12,7 @@ import java.util.Optional;
 import java.util.Scanner;
 
 import static java.lang.StringTemplate.STR;
-import static org.example.ControlPanel.getChoice;
-import static org.example.ControlPanel.welcome;
+import static org.example.ControlPanel.*;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
@@ -41,16 +40,12 @@ public class Main {
     private static void startGame() throws IOException, InterruptedException {
         Game game = new Game();
         ScoreRepository scoreRepository = new ScoreRepositoryFile();
-        System.out.println("Enter your name: ");
-        System.out.print("> ");
-        String name = input.nextLine();
+        String name = askQuestion("Enter your name: ");
         int i = 0;
         while (!game.isAnsweredAllQuestions()) {
             System.out.println(++i + "-");
             var question = game.getQuestion();
-            System.out.println(question);
-            System.out.print("> ");
-            char ans = input.nextLine().charAt(0);
+            char ans = askQuestion(question.toString()).charAt(0);
             boolean isCorrect = game.answer(question, ans);
             System.out.println(
                     isCorrect ? RandomMessages.getMessage(Message.SUCCESS) : RandomMessages.getMessage(Message.FAILED));

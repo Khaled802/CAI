@@ -28,4 +28,10 @@ public class ControlPanel {
         System.out.print("> ");
         return input.nextLine().charAt(0);
     }
+
+    public static String askQuestion(String question) {
+        System.out.println(question);
+        System.out.print("> ");
+        return input.nextLine();
+    }
 }
